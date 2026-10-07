@@ -1,0 +1,20 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "GD 2000 — Game Design Slides"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - text: Game Loops
+        menu:
+          - game-loops/index.qmd
+          - game-loops/refs.md
+  search: true
+
+format:
+  html:
+    theme: cosmo
+    toc: true

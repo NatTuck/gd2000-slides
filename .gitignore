@@ -1,0 +1,9 @@
+# Quarto build output
+/.quarto/
+/_site/
+**/*_files/
+**/*.html
+**/*.quarto_ipynb
+
+# Sandbox artifacts
+.nest

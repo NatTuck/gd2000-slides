@@ -1,0 +1,988 @@
+---
+title: "Game Loops"
+subtitle: "Loops and the Mechanics That Shape Them"
+author: "GD 2000 — Game Design"
+date: today
+format:
+  revealjs:
+    theme: [default, custom.scss]
+    slide-number: true
+    incremental: false
+    controls: true
+    progress: true
+    hash: true
+    center: false
+    code-line-numbers: true
+    chalkboard: true
+    footer: "GD 2000 · Game Loops"
+    preview-links: auto
+    fig-align: center
+    width: 1280
+    height: 800
+    margin: 0.08
+---
+
+## What Is a Game Loop? {.smaller}
+
+A **game loop** is the repeating cycle of:
+
+> what the player **does** → what the game **does back** → why the player does
+> it **again**.
+
+::: {.fragment}
+Every game has one — *Pong* and *Tetris*, but also **chess**, **poker**, and a
+game of **tag**. In *Pong* it takes about two seconds; a chess game can take an
+afternoon. Most of the loop lives in the **player's head**.
+:::
+
+::: {.fragment}
+Designers *find* the loop, *name* it, and *tune* it. If you can't state your
+game's loop in one sentence, you don't have a game yet — you have a pile of
+features.
+:::
+
+::: {.notes}
+Open by asking the class for the loop of a game they know — take a video game
+*and* a non-digital one. Write the answers as *verb → reward → repeat* on the
+board. Today's arc: the loop is fixed; **mechanics** are what modify it.
+:::
+
+## The Core Loop {.smaller}
+
+```{mermaid}
+flowchart LR
+  A([Action]) --> F([Feedback])
+  F --> R([Reward])
+  R --> M([Motivation])
+  M --> A
+```
+
+::: {.fragment}
+- **Action** — the core *verb* the player performs, over and over (shoot, jump,
+  move a piece, bet, pass the ball).
+- **Feedback** — what the game shows, sounds, and feels in response. It must be
+  **immediate** and **legible**.
+- **Reward** — what the player gains: power, progress, information, story — or
+  just the next problem.
+- **Motivation** — why they go again: curiosity, mastery, the goal in view.
+:::
+
+::: {.notes}
+The verb is the promise the game makes. Everything for the rest of the lecture
+hangs off these four stages. Keep returning to this diagram.
+:::
+
+## The Engine Loop {.smaller}
+
+In software, a "game loop" also means the **code** that runs the game, frame by
+frame:
+
+::: {.columns}
+::: {.column width="48%"}
+```c
+while (running) {
+  poll_input();   // read the player
+  update(dt);     // advance the world one step
+  render();       // draw it
+}
+```
+:::
+::: {.column width="52%"}
+| | Design loop | Engine loop |
+|---|---|---|
+| Who runs it | the **player** | the **computer** |
+| Timescale | seconds → hours | milliseconds |
+| Failure | boredom, confusion | lag, jank, bugs |
+:::
+:::
+
+::: {.fragment}
+Same name, two things. The engine loop is **mechanics**; the design loop is
+**meaning**. Feedback later than ~**100 ms** starts to feel disconnected.
+:::
+
+::: {.fragment}
+And **non-digital games have no engine loop at all** — chess, poker, and
+basketball are pure design loops. The rest of this deck is about *that* loop.
+:::
+
+::: {.notes}
+This is the only slide on the engine loop: name it, distinguish it, move on.
+Everything else is the design loop — which is what a designer tunes, and which
+every non-digital game has to get right without any code.
+:::
+
+## Loops Nest: Three Timescales {.smaller}
+
+A good game is not one loop but several, running inside each other.
+
+| Loop | Timescale | Digital example | Tabletop example |
+|---|---|---|---|
+| **Micro** | seconds | aim → shoot → the enemy reacts | move a piece → see the reply |
+| **Meso** | minutes | clear a room → reach a checkpoint | win a hand of poker |
+| **Macro** | hours | level up → finish the campaign | win the tournament |
+
+::: {.fragment}
+- Each loop **feeds** the next: micro wins add up to meso progress, and meso
+  progress unlocks macro goals.
+- Designers tune the **handoff** between timescales — that is where pacing and
+  "flow" live.
+:::
+
+::: {.notes}
+Ask students to identify the three loops in a game they play — ideally one that
+isn't on a screen. Many flat-feeling games have only one timescale designed.
+:::
+
+## Tight and Loose Loops {.smaller}
+
+The **length** of a loop sets the game's pace.
+
+- **Tight loops** — short, immediate, low friction. *Tetris*, *Vampire
+  Survivors*, a match-3; **Jenga**, **tag**, a single poker hand.
+- **Loose loops** — long, deferred, high investment. *Civilization*, an MMO;
+  **chess**, **Monopoly**, a **D&D campaign**.
+
+::: {.fragment}
+- Neither is better; they attract different players and moods.
+- Tight loops give **constant** reward; loose loops give a **bigger** reward,
+  less often.
+- The danger signs: a loop so long the player loses the thread, or so short it
+  stops feeling earned.
+:::
+
+::: {.notes}
+"One more turn" and "one more hand" are loose loops that *feel* tight. Discuss
+how feedback frequency and reward size trade off.
+:::
+
+## Reading a Loop: *Tetris* {.smaller}
+
+Every game is a loop you can read straight off the screen — or the board.
+
+| | In *Tetris* |
+|---|---|
+| **Action** | move, rotate, drop a piece |
+| **Feedback** | the piece snaps into place |
+| **Reward** | a line clears; the stack shrinks |
+| **Motivation** | the stack is rising; the next piece is coming |
+
+::: {.fragment}
+- The **micro** loop is one piece; the **meso** loop is one board; the **macro**
+  loop is the high score.
+- **Escalation** — every loop speeds up. The loop itself stays the same; only
+  the stakes rise.
+:::
+
+::: {.fragment}
+The same four rows describe a **chess** game or a **poker** hand — only the verbs
+change.
+:::
+
+::: {.notes}
+Walk through the table live, then repeat with a student-chosen game. A loop
+description is a *design tool*, not a plot summary.
+:::
+
+## Loops Beyond the Screen {.smaller}
+
+Every game is a loop, digital or not.
+
+| Game | Action (the verb) | Reward | The loop |
+|---|---|---|---|
+| **Chess** | move a piece | material, position, tempo | develop → attack → win |
+| **Poker** | bet, call, or fold | the pot, information | ante → bet → showdown |
+| **Basketball** | pass, shoot, defend | points, possession | possession → score → win |
+| **D&D** | declare an action | story, loot, levels | explore → encounter → grow |
+
+::: {.fragment}
+- The **verb** changes; the **shape** does not. That is why you can prototype a
+  loop with paper and tokens — or with nothing at all.
+:::
+
+::: {.notes}
+Ask each student to name a non-digital game and its verb. Loops are not a
+video-game idea.
+:::
+
+## Why Loops Hook {.smaller}
+
+A loop repeats because the player *wants* to — not because they have to. Three
+human needs do most of the work:
+
+- **Competence** — "I am getting better."
+- **Autonomy** — "I chose this."
+- **Relatedness** — "This matters to someone (or something) I care about."
+
+::: {.fragment}
+- **Variable rewards** — unpredictable payoffs are stickier than fixed ones
+  (the slot-machine effect). Poker's "one more hand" and the rematch run on the
+  same pull.
+- **Near-misses** and **streaks** — "so close" and "on a roll" both pull the
+  player back for one more try.
+- Ethics: the same mechanisms that create **engagement** can create
+  **compulsion**. Design the loop you would want to be caught in.
+:::
+
+::: {.notes}
+Self-determination theory (Deci & Ryan); variable-ratio reinforcement
+(Skinner). Gambling is the cautionary case. This is where designers take on
+responsibility.
+:::
+
+## Roadmap: How Mechanics Modify the Loop {.smaller}
+
+Everything so far is the **same loop**. What makes games different is the
+**mechanics** wrapped around it.
+
+::: {.fragment}
+A **mechanic** is any rule that changes what the player can do, or what the game
+does back. Almost every mechanic works by adding one of three things:
+
+- a **decision** (a choice with consequences)
+- a **cost** (something to spend or risk)
+- an **uncertainty** (something you don't control)
+:::
+
+::: {.fragment}
+Over the next hour we drop these onto the loop one at a time — **decisions,
+chance, information, skill, resources, risk, progression, escalation, time,
+people, and story** — and watch what each one does to the four stages.
+:::
+
+::: {.notes}
+This is the thesis of the whole deck: **mechanics are loop modifiers.** Every
+Part II slide answers "how does this mechanic change the loop?"
+:::
+
+## Decisions Drive the Loop {.smaller}
+
+The **decision** is what turns a loop into a *game*.
+
+- **Chess** — every move is a choice with consequences; the loop is dense with
+  decisions.
+- **Snakes and Ladders** — the player rolls and moves; there are **no decisions
+  at all**.
+
+::: {.fragment}
+A loop with no decisions still *repeats*, but it can't be *played* — only
+*watched*. The player is a spectator of their own turn.
+:::
+
+::: {.fragment}
+Design test: for each pass of the loop, ask **"what did the player decide?"** If
+the answer is "nothing", the mechanic isn't doing any work.
+:::
+
+::: {.notes}
+The central distinction of the deck. Chess is near-100% decisions; Snakes and
+Ladders is 0%. Keep asking "where is the decision?"
+:::
+
+## Case: *Snakes and Ladders* {.smaller}
+
+| Stage | In *Snakes and Ladders* |
+|---|---|
+| **Action** | roll the die, move the token |
+| **Feedback** | the token lands; you slide down or climb up |
+| **Reward** | progress toward square 100 |
+| **Motivation** | *the dice have already decided* |
+
+::: {.fragment}
+The cleanest example of a **loop without agency**: pure chance, no skill, no
+strategy. It is a *race*, not a game of decisions.
+:::
+
+::: {.fragment}
+Use it as a **control**: add decisions to this loop and you start to get a real
+game — which is exactly what *Uno* does.
+:::
+
+::: {.notes}
+Snakes and Ladders is our baseline "loop with no decisions". We'll compare Uno
+to it later; same simplicity, but with choices.
+:::
+
+## Chance: Input vs Output Randomness {.smaller}
+
+**Randomness** adds uncertainty to the loop. *Where* you put it matters:
+
+- **Input randomness** — the dice/cards are dealt *before* you decide, so you
+  **plan around** them. (*Tetris* pieces, *Hold'em* hole cards, *Uno* draw.)
+- **Output randomness** — the dice roll *after* you decide and settle the
+  outcome. (*Snakes and Ladders*: you move, then the die decides.)
+
+::: {.fragment}
+Input randomness creates **problems to solve**; output randomness can erase the
+value of your decision. Most "that's unfair!" feelings come from **output**
+randomness.
+:::
+
+::: {.fragment}
+Designers mix both — but the more control you want the player to feel, the more
+you push randomness to the **input** side.
+:::
+
+::: {.notes}
+A well-known design distinction (Burgun and others). Snakes and Ladders is pure
+output randomness — the decision, such as it is, is irrelevant.
+:::
+
+## Case: *Tetris* — a randomizer you can plan around {.smaller}
+
+| Stage | In *Tetris* |
+|---|---|
+| **Action** | move, rotate, drop |
+| **Feedback** | the piece snaps; lines flash and clear |
+| **Reward** | cleared lines, a shrinking stack |
+| **Motivation** | the stack is rising; a good piece is coming |
+
+::: {.fragment}
+The **randomizer** is *input* randomness: you can't choose the piece, but you
+*can* plan around it (hold, preview, wells). Skill lives in **what you do with a
+bad piece**.
+:::
+
+::: {.fragment}
+Escalation comes from **speed**, not new rules — the loop tightens until you
+can't keep up. The verb never changes.
+:::
+
+::: {.notes}
+Contrast with Snakes and Ladders: both involve chance, but Tetris lets the
+player plan around it. That single difference is most of the game.
+:::
+
+## Hidden Information — *Hold'em* vs *Chess* {.smaller}
+
+**Information** is a mechanic too: what does the player know when they decide?
+
+- **Perfect information** (*Chess*): both players see everything. The loop is
+  pure calculation.
+- **Hidden information** (*Texas Hold'em*): you see your two cards and the
+  board — never theirs. The loop becomes **inference and deception**.
+
+::: {.fragment}
+Hidden information turns the loop from *"what is the best move?"* into *"what
+does my opponent think I have — and what do they have?"*
+:::
+
+::: {.fragment}
+*TF2* hides enemy positions (fog, flanks); *Uno* hides every hand but yours.
+:::
+
+::: {.notes}
+Perfect vs imperfect information is one of the biggest dividers in game design.
+Chess rewards computation; poker rewards modelling other minds.
+:::
+
+## Bluffing and Reading {.smaller}
+
+When information is hidden, the loop grows a **second layer**:
+
+- **Bluffing** — acting on a hand you don't have (*Hold'em*; the *TF2* Spy's
+  disguise).
+- **Reading** — inferring what others know (*Hold'em* tells; spotting the Spy).
+
+::: {.fragment}
+This is a **loop about loops**: your action is *feedback to the other players*,
+and their reaction is feedback to you. The mechanic lives **between players**,
+not in the rules.
+:::
+
+::: {.fragment}
+It's why poker is a *people* game and chess is a *board* game — same loop,
+different information.
+:::
+
+::: {.notes}
+Bluffing is emergent: it isn't a rule, it's what players do when information is
+hidden. Good examples of mechanics creating behaviour.
+:::
+
+## Skill: Execution vs Knowledge {.smaller}
+
+Games ask the player to be good at *different things*:
+
+- **Execution** — doing it precisely, under time pressure (*Tetris*, *TF2*
+  aiming and movement).
+- **Knowledge / calculation** — finding the right move (*Chess* openings and
+  endgames).
+- **Judgment under uncertainty** — (*Hold'em* bet sizing, *TF2* positioning).
+
+::: {.fragment}
+A loop is only as interesting as the **skill it tests**. Match the verb to the
+skill you want to reward: reflexes, planning, or nerve.
+:::
+
+::: {.fragment}
+Most good games layer all three — *TF2* asks for aim, map knowledge, *and*
+judgment.
+:::
+
+::: {.notes}
+Ask: what skill does your game's loop actually reward? If the answer is "luck",
+you may have built Snakes and Ladders.
+:::
+
+## Mastery and the Skill Ceiling {.smaller}
+
+A good loop has a **low floor and a high ceiling**:
+
+- **Easy to start** — the verb is obvious (*Tetris*, *Uno*).
+- **Hard to master** — depth that takes years (*Chess*, *Hold'em*, *TF2*).
+
+::: {.fragment}
+Mastery is what keeps the **macro** loop alive: the loop stays the same while
+the player gets better. That is the "one more game" pull long after novelty
+fades.
+:::
+
+::: {.fragment}
+The **skill ceiling** sets how long the loop can stay interesting. If a machine
+or a spreadsheet can solve it, the loop is over.
+:::
+
+::: {.notes}
+Skill ceiling vs floor is the classic "minutes to learn, lifetime to master"
+idea. Chess has run for centuries on one loop.
+:::
+
+## Resources and Economy {.smaller}
+
+Many loops run on a **currency** you spend and gain:
+
+- *Hold'em* — chips (and information).
+- *Chess* — material, tempo, space.
+- *Uno* — cards in hand.
+- *TF2* — health, ammo, metal, and *time*.
+
+::: {.fragment}
+An economy has **sources** (how you gain) and **sinks** (how you spend). Design
+the exchange rate: what does one pass of the loop cost, and what does it buy?
+:::
+
+::: {.fragment}
+A resource with no sink becomes meaningless; a sink with no source just
+frustrates. The loop is the **pump** that moves value between them.
+:::
+
+::: {.notes}
+Sources and sinks is the basic economy vocabulary. Ask students to name the
+source and sink of a game they know.
+:::
+
+## Risk and Push-Your-Luck {.smaller}
+
+**Risk** is when the loop can *cost* you, not just reward you:
+
+- *Hold'em* — betting is optional risk; you can lose the pot.
+- *Chess* — a sacrifice trades material for position.
+- *TF2* — pushing a point can win the round or get you killed.
+
+::: {.fragment}
+**Push-your-luck** turns the decision into "how much do I dare?" The loop gets
+tense because the reward and the danger scale together.
+:::
+
+::: {.fragment}
+Without risk, decisions are just optimizations. Risk is what makes them *feel*
+like decisions.
+:::
+
+::: {.notes}
+Risk is the emotional core of the loop. It's also what makes losses meaningful
+— and what makes players blame themselves (good) instead of the game (bad).
+:::
+
+## Case: *Texas Hold'em* — the betting loop {.smaller}
+
+| Stage | In *Hold'em* |
+|---|---|
+| **Action** | check, bet, call, raise, fold |
+| **Feedback** | opponents' bets and tells; the board |
+| **Reward** | the pot; information |
+| **Motivation** | "one more hand"; the pot is growing |
+
+::: {.fragment}
+Note how many mechanics stack on one tiny loop: **hidden information** +
+**chance** + **resources** + **risk** + **social reading**. The betting round
+*is* the loop, repeated.
+:::
+
+::: {.fragment}
+It's the best demonstration that mechanics are **layered onto** a simple loop —
+not separate from it.
+:::
+
+::: {.notes}
+Poker is the "many mechanics, tiny loop" case for tabletop, mirroring TF2 for
+digital. Use it to show layering.
+:::
+
+## Progression and Advancement {.smaller}
+
+**Progression** is a second loop wrapped around the first: the loop changes
+*you*.
+
+- *Baldur's Gate 3* — levels, gear, new abilities; the character grows.
+- *TF2* — unlocks and loadouts; the options grow.
+- *Chess* — the rating; the *player* grows, not the pieces.
+
+::: {.fragment}
+Progression gives the loop a **memory**. Each pass leaves a permanent mark, so
+the macro loop has somewhere to go.
+:::
+
+::: {.fragment}
+Two flavors: **character progression** (the avatar changes) and **player
+progression** (the human changes). Chess is the pure second kind.
+:::
+
+::: {.notes}
+Progression is what makes a loop a *campaign*. Note chess: no character
+progression at all, yet the strongest long-term loop in the room.
+:::
+
+## Escalation and Difficulty {.smaller}
+
+A loop that never changes gets boring; escalation keeps it alive:
+
+- *Tetris* — gravity speeds up; the same loop, tighter.
+- *Hold'em* — blinds rise; the same loop, costlier.
+- *TF2* — the match clock and sudden-death; the same loop, decisive.
+
+::: {.fragment}
+Escalation should raise the **stakes**, not the **rules**. Add rules only when
+the loop has genuinely gone stale.
+:::
+
+::: {.fragment}
+**Difficulty** is the *shape* of the escalation curve. Too flat is dull; too
+steep is punishing; the sweet spot is "flow".
+:::
+
+::: {.notes}
+The cleanest escalators change no rules at all — they just squeeze the same loop
+harder. Tetris and rising blinds are the canonical examples.
+:::
+
+## Macro Loops: Session vs Career {.smaller}
+
+| Loop | Span | Examples |
+|---|---|---|
+| **Session** | minutes–hours | a *Tetris* board, a *Hold'em* session, a *TF2* match, one *Uno* round |
+| **Career** | days–years | a chess rating, *TF2* hours, a *BG3* campaign |
+
+::: {.fragment}
+The **session** loop is where the mechanics live; the **career** loop is what
+brings the player back tomorrow. Good games **align** them — progress in one
+feeds the other.
+:::
+
+::: {.fragment}
+A *BG3* campaign is a career loop built from session loops (quests, fights);
+*Uno* is almost all session.
+:::
+
+::: {.notes}
+Alignment matters: a great session loop with no career loop leaks players; a
+career loop with a bad session loop never gets started.
+:::
+
+## Positive Feedback — Snowballing {.smaller}
+
+**Positive feedback** rewards the leader, so advantage compounds:
+
+- *Chess* — a material advantage wins more material.
+- *Hold'em* — a big stack can bully a small one.
+- *Monopoly* — owning property earns rent to buy more property.
+- *TF2* — a team holding the point snowballs.
+
+::: {.fragment}
+Positive feedback makes **runaway leaders** and satisfying power fantasies —
+and it can end the game early. Use it to create *momentum*, and watch for the
+point where the outcome is decided.
+:::
+
+::: {.fragment}
+*Monopoly* is the classic warning: the loop is fun until it is mathematically
+over — and then it keeps going.
+:::
+
+::: {.notes}
+Snowballing is the mechanic behind both "power fantasy" and "this game is
+already lost". Monopoly is the textbook failure of it.
+:::
+
+## Negative Feedback — Rubber-Banding {.smaller}
+
+**Negative feedback** helps the loser, keeping the game close:
+
+- *Uno* — Draw Two / Wild Draw Four punish the leader; a bad hand can be refilled.
+- *Mario Kart* — better items go to the player in last place.
+- *Hold'em* — blinds keep a big stack from sitting forever; stacks normalize.
+
+::: {.fragment}
+Rubber-banding keeps the loop **tense** — but too much and the lead stops
+mattering, which feels unfair in the *other* direction.
+:::
+
+::: {.fragment}
+Balance is the **mixture** of the two: enough positive feedback for momentum,
+enough negative for hope.
+:::
+
+::: {.notes}
+Mario Kart is the canonical rubber-band. The design question is never "which is
+right?" but "how much of each?"
+:::
+
+## Balance and Dominant Strategies {.smaller}
+
+A mechanic is **balanced** when no single choice dominates:
+
+- *Chess* — openings are balanced by centuries of play; no forced win.
+- *TF2* — classes counter each other; the "meta" shifts with patches.
+- *Uno* — a house rule like "always play a Draw card" can dominate if unchecked.
+
+::: {.fragment}
+A **dominant strategy** collapses the loop: if one action is always best, the
+*decision* disappears and you are back at *Snakes and Ladders*.
+:::
+
+::: {.fragment}
+Balance work is really **loop work** — making sure every pass still offers a
+real choice.
+:::
+
+::: {.notes}
+Tie it back: dominant strategy = no decision = no game. That's why balance is a
+loop problem, not a spreadsheet problem.
+:::
+
+## Real-Time vs Turn-Based {.smaller}
+
+**Time** is a mechanic:
+
+- **Turn-based** (*Chess*, *Hold'em*, *Uno*) — you decide with the clock
+  stopped; the loop is about *thinking*.
+- **Real-time** (*Tetris*, *TF2*) — the clock never stops; the loop is about
+  *doing*, and thinking happens under pressure.
+
+::: {.fragment}
+Real-time rewards execution and punishes hesitation; turn-based rewards analysis
+and hides no one's thinking time.
+:::
+
+::: {.fragment}
+Many games mix them — *BG3* pauses for turns but runs its world in real time.
+The choice sets what the loop *feels* like.
+:::
+
+::: {.notes}
+Time structure is one of the first decisions a designer makes, and it shapes
+everything downstream — what skills matter, how tense the loop feels.
+:::
+
+## Feedback and Juice {.smaller}
+
+The loop's **feedback** stage can be tuned for feel:
+
+- *Tetris* — the snap, the line-clear flash, the accelerating music.
+- *TF2* — hit markers, damage numbers, the critical-hit sound.
+- *Hold'em* — the chip clatter, the slow river reveal.
+
+::: {.fragment}
+**Juice** is feedback that is bigger and clearer than it strictly needs to be.
+It makes the loop *legible* and *satisfying*, even when nothing changes
+mechanically.
+:::
+
+::: {.fragment}
+Remember the ~**100 ms** rule: feedback must land while the action is still "in
+the player's hand".
+:::
+
+::: {.notes}
+Juice is cheap and high-impact. It doesn't change the loop, it changes how the
+loop *feels* — which is most of game feel.
+:::
+
+## Social and Multiplayer Loops {.smaller}
+
+Other players turn the loop outward:
+
+- *TF2* — team roles: the loop is partly about *coordination*.
+- *Hold'em* — the loop is partly about *deception*.
+- *Uno* — the loop is partly about *take-that* spite.
+
+::: {.fragment}
+Multiplayer adds a **social loop**: what you do is feedback to other people, and
+their reactions feed back to you. This is often the strongest retention mechanic
+of all.
+:::
+
+::: {.fragment}
+Even single-player games borrow this — *BG3*'s companions are social loops run
+by the computer.
+:::
+
+::: {.notes}
+People are the most renewable content. A social loop can keep a mechanically
+simple game alive for decades.
+:::
+
+## Narrative Loops {.smaller}
+
+Story is a loop too — *Baldur's Gate 3*: **explore → meet → choose →
+consequence → explore**.
+
+| Stage | In *Baldur's Gate 3* |
+|---|---|
+| **Action** | explore, talk, choose |
+| **Feedback** | the world and companions react |
+| **Reward** | story, relationships, loot, levels |
+| **Motivation** | "what happens if I…?" |
+
+::: {.fragment}
+Narrative mechanics (dialogue, choice, consequence) let the loop's *reward* be
+**meaning**, not just power. It is the slowest loop — and often the stickiest.
+:::
+
+::: {.notes}
+Curiosity is a motivation the other loops don't have. Narrative turns the loop's
+reward into story rather than numbers.
+:::
+
+## Case: *Team Fortress 2* — many mechanics, one loop {.smaller}
+
+*TF2* layers almost every lens onto a single verb — *shoot the other team*:
+
+- **Skill** (aim, movement) and **roles** (nine classes).
+- **Team/social** loops and **objectives** (control points, carts).
+- **Progression** (unlocks), **economy** (metal, trading).
+- **Juice** (hit feedback) and **metagame** (loadouts).
+
+::: {.fragment}
+The core loop never changes — *spot, shoot, survive*. The **mechanics** are what
+make it a different game from a plain deathmatch.
+:::
+
+::: {.fragment}
+This is the thesis of the lecture in one game: **mechanics are loop modifiers.**
+:::
+
+::: {.notes}
+TF2 is the "many mechanics, one loop" case for digital games. Compare it to the
+poker case: same idea, different medium.
+:::
+
+## Case: *Uno* — a small loop with many mechanics {.smaller}
+
+*Uno* is a tiny loop carrying a lot of design:
+
+- **Chance** (the draw) and **light decisions** (match colour or number).
+- **Resources** (hand size) and **take-that** (Skip, Reverse, +2/+4).
+- **Negative feedback** (a bad hand can be dumped onto the next player).
+
+::: {.fragment}
+Compare to *Snakes and Ladders*: the same "play and move" simplicity, but *Uno*
+adds **decisions**, **targeting**, and **catch-up** — and becomes a game.
+:::
+
+::: {.fragment}
+Small loops are the best place to *study* mechanics, because you can see each
+one doing its job.
+:::
+
+::: {.notes}
+Uno closes the loop on Snakes and Ladders from the start of the lecture: add a
+decision and the loop becomes playable.
+:::
+
+## The Seven Games Side by Side {.smaller}
+
+::: {.games-table}
+| Game | Core verb | Key mechanics | Loop length |
+|---|---|---|---|
+| **Chess** | move | perfect information, skill, no chance | long |
+| **Snakes & Ladders** | roll | pure chance, no decisions | short |
+| **Tetris** | place | real-time, execution, escalation | tight |
+| **Texas Hold'em** | bet | hidden information, risk, resources, social | medium |
+| **Uno** | play a card | chance, take-that, catch-up | short |
+| **TF2** | shoot | real-time, team, roles, economy | medium |
+| **Baldur's Gate 3** | choose | narrative, progression, exploration | long |
+:::
+
+::: {.fragment}
+The same four stages in every row. What differs is *which mechanics* surround
+them — and that is the whole of game design.
+:::
+
+::: {.notes}
+Land the survey: seven very different games, one shared skeleton. Everything we
+did today was finding the mechanics wrapped around that skeleton.
+:::
+
+## The Loop-and-Mechanics Map {.smaller}
+
+Every mechanic earns its place by changing one of the four stages:
+
+| Mechanic | What it changes |
+|---|---|
+| **Decisions** | whether there is an Action at all |
+| **Chance** | the certainty of the Action and the Reward |
+| **Information** | what you know before you Act |
+| **Skill** | how hard the Action is to get right |
+| **Resources** | the Reward economy (sources and sinks) |
+| **Risk** | the *cost* of the Action |
+| **Progression** | the macro loop's Reward |
+| **Escalation** | the loop's speed and stakes over time |
+| **Time** | whether the loop waits for you |
+| **People** | Feedback that comes from other players |
+| **Story** | Reward as meaning, not power |
+
+::: {.fragment}
+Almost every mechanic is adding a **decision**, a **cost**, or an
+**uncertainty** to the loop. If it adds none of the three, it probably isn't a
+mechanic — it's decoration.
+:::
+
+::: {.notes}
+This table is the takeaway slide. If students remember one thing, this is it:
+mechanics map onto the stages of the loop.
+:::
+
+## Reading Any Game's Loop {.smaller}
+
+The method — five steps:
+
+1. Name the **verb** (the Action).
+2. Name the **feedback** and the **reward**.
+3. Name the **motivation** — why go again?
+4. Name the **mechanics** wrapped around it — which stages do they touch?
+5. Name the **loops that nest** (micro / meso / macro).
+
+::: {.fragment}
+You now have a one-page design analysis of any game — chess, *Hold'em*, or one
+you make up.
+:::
+
+::: {.fragment}
+Do this for a game you love. The mechanics you *didn't* notice are the ones doing
+the most work.
+:::
+
+::: {.notes}
+This method is the reusable tool from the lecture — it applies to any game, and
+it's what the assignment asks for.
+:::
+
+## Balancing Loops {.smaller}
+
+Design practice for keeping the loop alive:
+
+- Give each loop a **reason to continue** — a goal in view.
+- Match **skill** to the challenge (flow).
+- Mix **positive** and **negative** feedback — momentum *and* hope.
+- Provide **meaningful choices** every pass, or you're back to *Snakes and
+  Ladders*.
+- Tune **escalation** so the loop tightens, not just grows.
+
+::: {.fragment}
+Balance is not "make it fair" — it is **"keep every pass of the loop worth
+playing."**
+:::
+
+::: {.notes}
+Balance as a loop property, not a fairness property. The test is always: is this
+pass worth playing?
+:::
+
+## Common Loop Failures {.smaller}
+
+Anti-patterns to watch for:
+
+- **No decisions** — the *Snakes and Ladders* trap: the loop runs, but the
+  player doesn't play.
+- **Dominant strategy** — one action is always best; the choice disappears.
+- **Runaway leader** — positive feedback with no brake; the game is decided
+  early.
+- **Illegible feedback** — the player can't tell what happened or why.
+- **Stale loop** — no escalation, no progression; the same pass forever.
+
+::: {.fragment}
+Every one of these is a **mechanic** problem, not an art or content problem —
+which is why they are cheap to fix early and expensive to fix late.
+:::
+
+::: {.notes}
+These are the failure modes students will hit. Each maps to a mechanic we
+covered; naming them helps diagnose prototypes.
+:::
+
+## Designing Your Loop {.smaller}
+
+Five questions before you build:
+
+1. What is the player's **core verb**?
+2. What do they **get** for doing it?
+3. Why do they **want to do it again**?
+4. Which **mechanics** modify the loop — and which stage do they touch?
+5. Where could the loop feel **stale, unfair, or slow**?
+
+::: {.fragment}
+Prototype the loop **first** — with paper, tokens, or placeholder art. If it
+isn't fun there, better art won't save it.
+:::
+
+::: {.notes}
+This is the deliverable of the first design assignment — a one-sentence loop,
+the mechanics around it, and the micro/meso/macro breakdown.
+:::
+
+## In-Class Exercise {.smaller}
+
+We'll cold-read **two games** in class — no prior analysis:
+
+- **Deus Ex** — an immersive sim: choices, multiple solutions, and systems that
+  interact.
+- **Universal Paperclips** — an incremental game: a loop that literally
+  **rewrites itself**.
+
+::: {.fragment}
+For each, answer the five questions: the **verb**, the **reward**, the
+**motivation**, the **mechanics**, and the **failure modes**.
+:::
+
+::: {.fragment}
+What mechanics modify the loop — and where does the loop **change shape** as you
+play?
+:::
+
+::: {.notes}
+These two games are deliberately *not* used as examples anywhere in the lecture
+— we analyze them fresh, together. Deus Ex for interacting systems and player
+agency; Universal Paperclips for escalation and a self-modifying loop.
+:::
+
+## Recap {.smaller}
+
+- A game is a **loop**: action → feedback → reward → motivation.
+- **Mechanics** are what modify the loop — decisions, chance, information,
+  skill, resources, risk, progression, escalation, time, people, and story.
+- Loops **nest** (micro / meso / macro) and **feed back** on themselves
+  (snowball / rubber-band).
+- Balance means keeping every pass **worth playing**.
+- Design the loop first; the mechanics serve it.
+
+::: {.fragment}
+**Exercise:** write your game's core loop in one sentence, then list the
+mechanics that modify it — and name the stage each one touches.
+:::
+
+::: {.notes}
+End on the exercise. One sentence for the loop, then the mechanics around it.
+Next session we cold-read Deus Ex and Universal Paperclips together.
+:::

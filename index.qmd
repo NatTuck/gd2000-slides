@@ -1,0 +1,11 @@
+---
+title: "GD 2000 — Game Design Slides"
+---
+
+Lecture slides for **GD 2000 — Game Design**.
+
+## Decks
+
+- [Game Loops](game-loops/index.qmd) — the core loop, nested loops, and how to
+  design one.
+- [Game Loops — Reference Notes](game-loops/refs.md) — a condensed version.
